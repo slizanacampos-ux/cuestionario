@@ -211,7 +211,6 @@
       .action-group { width: 100%; }
       .action-group button, .question-actions > button { flex: 1; }
       .review-item { grid-template-columns: 1fr; }
-      .confirmation-code { display: none !important; }
     }
   </style>
 </head>
@@ -326,7 +325,7 @@
     <section id="review" class="card review">
       <span class="eyebrow">Revisión final</span>
       <h2>Revise sus respuestas</h2>
-      <p class="review-lead">Puede volver a cualquier situación o escenario antes de enviar. El envío final actualiza una sola fila de Google Sheets con los datos de identificación y las doce respuestas del instrumento.</p>
+      <p class="review-lead">Puede volver a cualquier situación o escenario antes de enviar.</p>
       <div id="reviewList" class="review-list"></div>
       <div class="review-actions"><button id="backToQuestions" class="secondary-btn" type="button">Volver al cuestionario</button><button id="submitBtn" class="primary-btn" type="button">Enviar respuestas</button></div>
       <div id="submitValidation" class="validation" role="alert"></div>
@@ -377,7 +376,7 @@
             { title: '¿Qué hacer?', text: 'Para cada escenario, interprete el razonamiento que sustenta la respuesta de estudiantes y proponga al menos una acción didáctica concreta.' },
             { title: '¿Cómo avanzar?', text: 'Se presenta un escenario por pantalla que debe responder para avanzar al siguiente. Puede volver al escenario anterior cuando lo necesite.' }
           ],
-          checklist: ['El escenario aparecerá en dos recuadros diferenciados.', 'El primer recuadro presenta la situación de clase.', 'El segundo recuadro presenta literalmente la respuesta del o de la estudiante.']
+          checklist: ['El escenario se presentará en dos recuadros diferenciados.', 'El primer recuadro presenta la situación de clase.', 'El segundo recuadro presenta literalmente la respuesta del o de la estudiante.']
         }
       };
 
@@ -606,12 +605,12 @@
         return new Promise((resolve, reject) => {
           const callback = `__gs_cb_${Date.now()}_${Math.random().toString(36).slice(2)}`;
           const script = document.createElement('script');
-          const timer = setTimeout(() => { cleanup(); reject(new Error('La verificación con Google Sheets excedió el tiempo de espera.')); }, timeoutMs);
+          const timer = setTimeout(() => { cleanup(); reject(new Error('La verificación con la base de datos excedió el tiempo de espera.')); }, timeoutMs);
           function cleanup() { clearTimeout(timer); script.remove(); try { delete window[callback]; } catch { window[callback] = undefined; } }
           window[callback] = data => { cleanup(); resolve(data); };
           const url = new URL(ENDPOINT);
           Object.entries({ ...params, callback }).forEach(([key, value]) => url.searchParams.set(key, String(value)));
-          script.onerror = () => { cleanup(); reject(new Error('No se pudo verificar la conexión con Google Sheets.')); };
+          script.onerror = () => { cleanup(); reject(new Error('No se pudo verificar la conexión con la base de datos.')); };
           script.src = url.toString();
           document.head.appendChild(script);
         });
@@ -625,7 +624,7 @@
           if (last?.ok && last.exists && itemSaved && (!expectedStatus || last.status === expectedStatus)) return last;
           await new Promise(resolve => setTimeout(resolve, 500 + i * 250));
         }
-        throw new Error(expectedStatus === 'completed' ? 'No fue posible confirmar el envío final en Google Sheets.' : 'No fue posible confirmar el guardado en Google Sheets.');
+        throw new Error(expectedStatus === 'completed' ? 'No fue posible confirmar el envío final en la base de datos.' : 'No fue posible confirmar el guardado en la base de datos.');
       }
 
       function queueRemoteSave(itemNumber, answer) {
@@ -635,7 +634,7 @@
         if (item.kind === 'didactic' && !answer.interpretation && !answer.didacticAction) return Promise.resolve();
         const task = async () => {
           await ensureRemoteSession();
-          setSaveStatus('saving', 'Guardando en Google Sheets…');
+          setSaveStatus('saving', 'Guardando en la base de datos…');
           const payload = { action: 'save', session_token: state.sessionToken, item_number: itemNumber, item_kind: item.kind, time_seconds: answer.timeSeconds || 0 };
           if (item.kind === 'decision') {
             payload.selected_option = answer.selectedOption || '';
@@ -646,12 +645,12 @@
             payload.didactic_action = answer.didacticAction || '';
           }
           await postToSheet(payload);
-          setSaveStatus('saved', 'Guardado en Google Sheets');
+          setSaveStatus('saved', 'Guardado en la base de datos');
         };
         saveSequence = saveSequence.then(task).catch(error => {
           console.error(error);
           setSaveStatus('error', 'Pendiente de sincronizar');
-          showBanner('error', 'El avance está guardado en este dispositivo, pero no se pudo confirmar la sincronización con Google Sheets. Revise su conexión antes del envío final.');
+          showBanner('error', 'El avance está guardado en este dispositivo, pero no se pudo confirmar la sincronización con la base de datos. Revise su conexión antes del envío final.');
         });
         return saveSequence;
       }
@@ -900,7 +899,7 @@
           return;
         }
         if (!REMOTE_ENABLED) {
-          els.submitValidation.textContent = 'El cuestionario aún no está conectado con Google Sheets. Complete GOOGLE_APPS_SCRIPT_URL en config.js antes de aplicarlo.';
+          els.submitValidation.textContent = 'El cuestionario aún no está conectado con la base de datos.';
           return;
         }
         clearTimeout(saveTimer);
@@ -977,7 +976,7 @@
             setSaveStatus('saved', 'Sesión recuperada');
           }).catch(error => {
             console.error(error);
-            showBanner('error', 'Se recuperó el progreso local, pero la sincronización con Google Sheets está pendiente. Puede continuar respondiendo.');
+            showBanner('error', 'Se recuperó el progreso local, pero la sincronización con la base de datos está pendiente. Puede continuar respondiendo.');
             setSaveStatus('error', 'Sin sincronizar');
           });
         } else {
@@ -1012,15 +1011,15 @@
           setSaveStatus('saving', 'Conectando en segundo plano…');
           void ensureRemoteSession().then(() => {
             hideBanner();
-            setSaveStatus('saved', 'Sesión registrada en Google Sheets');
+            setSaveStatus('saved', 'Sesión registrada en la base de datos');
           }).catch(error => {
             console.error(error);
             setSaveStatus('error', 'Pendiente de sincronizar');
-            showBanner('error', 'Puede continuar respondiendo. El progreso está guardado en este dispositivo y el sistema volverá a intentar conectarse con Google Sheets.');
+            showBanner('error', 'Puede continuar respondiendo. El progreso está guardado en este dispositivo.');
           });
         } else {
           setSaveStatus('saved', 'Modo local de prueba');
-          showBanner('warning', 'Este archivo todavía no está conectado con Google Sheets. Puede probar el cuestionario, pero el envío final permanecerá bloqueado hasta configurar GOOGLE_APPS_SCRIPT_URL en config.js.');
+          showBanner('warning', 'Este archivo todavía no está conectado con la base de datos. Puede probar el cuestionario, pero el envío final permanecerá bloqueado hasta configurar la base de datos.');
         }
       });
 
