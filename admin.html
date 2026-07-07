@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Panel del investigador | Cuestionario probabilístico</title>
+  <style>
+    :root { --bg:#f4f7fa; --surface:#fff; --text:#182632; --muted:#61717f; --line:#dbe3e9; --primary:#0f6e8c; --primary-dark:#0a536b; --success:#287a56; --warning:#9a6518; --danger:#b63c45; --shadow:0 16px 42px rgba(37,59,75,.10); --radius:18px; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--text); background:radial-gradient(circle at 0% 0%,rgba(15,110,140,.10),transparent 28%),var(--bg); }
+    .shell { width:min(1040px,calc(100% - 28px)); margin:0 auto; padding:26px 0 50px; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:18px; }
+    .brand { display:flex; align-items:center; gap:12px; font-weight:850; }
+    .mark { width:42px; height:42px; border-radius:13px; display:grid; place-items:center; color:#fff; background:linear-gradient(135deg,var(--primary),#1aa0b6); }
+    .card { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); }
+    .hero { padding:clamp(28px,5vw,54px); }
+    .eyebrow { display:inline-flex; padding:7px 11px; border-radius:999px; background:#e8f4f7; color:var(--primary-dark); font-size:.8rem; font-weight:850; letter-spacing:.07em; text-transform:uppercase; }
+    h1 { margin:16px 0 10px; font-size:clamp(2rem,5vw,3.7rem); letter-spacing:-.05em; line-height:1; }
+    .lead { margin:0; color:var(--muted); line-height:1.65; max-width:760px; }
+    .status-card { display:flex; align-items:center; gap:12px; margin:24px 0; padding:16px; border:1px solid var(--line); border-radius:14px; background:#fbfcfd; }
+    .dot { width:12px; height:12px; border-radius:50%; background:#aab6bf; flex:none; }
+    .status-card.ok .dot { background:var(--success); }
+    .status-card.error .dot { background:var(--danger); }
+    .status-card strong { display:block; margin-bottom:3px; }
+    .status-card span { color:var(--muted); font-size:.9rem; }
+    .actions { display:flex; gap:10px; flex-wrap:wrap; }
+    .btn { border:0; border-radius:12px; padding:12px 16px; font-weight:820; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; }
+    .btn-primary { color:#fff; background:linear-gradient(135deg,var(--primary),#198ea7); }
+    .btn-secondary { color:var(--primary-dark); background:#eaf2f5; }
+    .btn-disabled { color:#7c8992; background:#edf0f2; cursor:not-allowed; }
+    .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin-top:14px; }
+    .panel { padding:20px; }
+    .panel h2 { margin:0 0 8px; font-size:1.05rem; }
+    .panel p { margin:0; color:var(--muted); line-height:1.55; font-size:.9rem; }
+    .privacy { margin-top:14px; padding:18px 20px; border-left:4px solid var(--warning); }
+    .privacy strong { display:block; margin-bottom:5px; }
+    .privacy p { margin:0; color:var(--muted); line-height:1.55; }
+    code { background:#eef2f4; padding:2px 5px; border-radius:5px; }
+    @media(max-width:720px){ .grid{grid-template-columns:1fr;} .topbar{align-items:flex-start;} .actions{flex-direction:column;} }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar"><div class="brand"><div class="mark">P</div><div>Panel del investigador</div></div><a href="index.html" class="btn btn-secondary">Abrir cuestionario</a></header>
+    <section class="card hero">
+      <span class="eyebrow">Base privada en Google Sheets</span>
+      <h1>Acceso a las respuestas</h1>
+      <p class="lead">Los datos identificatorios y las respuestas no se cargan dentro de esta página pública. Para mantenerlos protegidos, el análisis y la descarga se realizan directamente en el Google Sheet privado.</p>
+
+      <div id="connectionStatus" class="status-card"><span class="dot"></span><div><strong>Comprobando conexión</strong><span>Verificando la aplicación web de Google Apps Script…</span></div></div>
+
+      <div class="actions">
+        <a id="sheetLink" class="btn btn-disabled" aria-disabled="true">Abrir base de datos en Google Sheets</a>
+        <button id="testBtn" class="btn btn-secondary" type="button">Volver a comprobar</button>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="card panel"><h2>Una fila por participante</h2><p>La hoja <strong>Respuestas</strong> reúne nombre completo, universidad, año de ingreso, estado de aplicación y las respuestas de los dos bloques del instrumento: 8 situaciones del bloque A y 4 escenarios del bloque B.</p></article>
+      <article class="card panel"><h2>Guardado progresivo</h2><p>Cada alternativa, justificación, interpretación y acción didáctica se actualiza al avanzar. El envío final completa la misma fila y añade duración y código de confirmación.</p></article>
+      <article class="card panel"><h2>Análisis y exportación</h2><p>Puede aplicar filtros, tablas dinámicas, gráficos y descargar la hoja como Excel o CSV desde Google Sheets.</p></article>
+    </section>
+
+    <section class="card privacy"><strong>Protección de datos</strong><p>Como la base contiene nombres y afiliación universitaria, mantenga el Google Sheet restringido al equipo autorizado. No publique la hoja ni utilice la opción “Publicar en la web”.</p></section>
+  </main>
+  <script src="config.js"></script>
+  <script>
+    (() => {
+      const CONFIG = window.APP_CONFIG || {};
+      const endpoint = String(CONFIG.GOOGLE_APPS_SCRIPT_URL || '').trim();
+      const sheetUrl = String(CONFIG.GOOGLE_SHEET_URL || '').trim();
+      const status = document.getElementById('connectionStatus');
+      const sheetLink = document.getElementById('sheetLink');
+      const testBtn = document.getElementById('testBtn');
+
+      if (/^https:\/\/docs\.google\.com\/spreadsheets\//.test(sheetUrl)) {
+        sheetLink.href = sheetUrl;
+        sheetLink.target = '_blank';
+        sheetLink.rel = 'noopener noreferrer';
+        sheetLink.className = 'btn btn-primary';
+        sheetLink.removeAttribute('aria-disabled');
+      }
+
+      function jsonp() {
+        if (!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec/.test(endpoint)) return Promise.reject(new Error('Falta configurar GOOGLE_APPS_SCRIPT_URL en config.js.'));
+        return new Promise((resolve, reject) => {
+          const cb = `__health_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+          const script = document.createElement('script');
+          const timer = setTimeout(() => { cleanup(); reject(new Error('Tiempo de espera agotado.')); }, 10000);
+          function cleanup(){ clearTimeout(timer); script.remove(); try{ delete window[cb]; }catch(_){ window[cb]=undefined; } }
+          window[cb] = data => { cleanup(); resolve(data); };
+          const url = new URL(endpoint); url.searchParams.set('action','health'); url.searchParams.set('callback',cb);
+          script.onerror = () => { cleanup(); reject(new Error('No se pudo conectar.')); };
+          script.src = url.toString(); document.head.appendChild(script);
+        });
+      }
+
+      async function check() {
+        status.className = 'status-card';
+        status.innerHTML = '<span class="dot"></span><div><strong>Comprobando conexión</strong><span>Verificando la aplicación web de Google Apps Script…</span></div>';
+        try {
+          const data = await jsonp();
+          if (!data?.ok) throw new Error(data?.error || 'Respuesta no válida.');
+          status.className = 'status-card ok';
+          status.innerHTML = `<span class="dot"></span><div><strong>Conexión activa</strong><span>La aplicación web responde y utilizará la hoja “${String(data.sheet || 'Respuestas')}”.</span></div>`;
+        } catch (error) {
+          status.className = 'status-card error';
+          status.innerHTML = `<span class="dot"></span><div><strong>Conexión no disponible</strong><span>${String(error.message || error)}</span></div>`;
+        }
+      }
+      testBtn.addEventListener('click', check);
+      check();
+    })();
+  </script>
+</body>
+</html>
