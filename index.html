@@ -864,7 +864,7 @@
         els.finishIcon.textContent = '↻';
         els.finishIcon.classList.add('sending');
         els.finishTitle.textContent = 'Respuestas recibidas';
-        els.finishMessage.textContent = 'El formulario se cerró correctamente. Las respuestas se están registrando en Google Sheets.';
+        els.finishMessage.textContent = 'El cuestionario se cerró correctamente. Por favor espere mientras se registran sus respuestas';
         els.confirmationBox.classList.add('hidden');
         els.retrySubmitBtn.classList.add('hidden');
         window.scrollTo({ top: 0, behavior: 'auto' });
@@ -874,7 +874,7 @@
         els.finishIcon.textContent = '✓';
         els.finishIcon.classList.remove('sending');
         els.finishTitle.textContent = 'Respuestas enviadas';
-        els.finishMessage.textContent = 'Gracias por completar el cuestionario. La aplicación quedó confirmada en la base de datos.';
+        els.finishMessage.textContent = 'Gracias por completar el cuestionario. Sus respuestas fueron registradas correctamente.';
         els.confirmationCode.textContent = state.sessionToken.replaceAll('-', '').slice(0, 10).toUpperCase();
         els.confirmationBox.classList.remove('hidden');
         els.retrySubmitBtn.classList.add('hidden');
