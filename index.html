@@ -211,35 +211,6 @@
       .action-group { width: 100%; }
       .action-group button, .question-actions > button { flex: 1; }
       .review-item { grid-template-columns: 1fr; }
-      /* Centrado definitivo de la pantalla final */
-      #finish,
-      #finish *,
-      #finishTitle,
-      #finishMessage,
-      #confirmationBox,
-      .finish-actions {
-        text-align: center !important;
-      }
-      
-      #finishMessage,
-      #finish p {
-        display: block !important;
-        max-width: 720px !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-        text-align: center !important;
-        text-justify: auto !important;
-      }
-      
-      #finishTitle {
-        text-align: center !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-      }
-      
-      .finish-actions {
-        justify-content: center !important;
-      }
       #confirmationBox,
       .confirmation-code {
       display: none !important;
@@ -371,7 +342,8 @@
     <section id="finish" class="card finish">
       <div id="finishIcon" class="finish-icon" aria-hidden="true">✓</div>
       <h2 id="finishTitle">Respuestas enviadas</h2>
-      <p id="finishMessage">Gracias por completar el cuestionario.</p>
+      <p id="finishMessage" style="text-align:center !important; text-align-last:center !important; max-width:720px; margin-left:auto; margin-right:auto;">
+  Gracias por completar el cuestionario.
       <div id="confirmationBox" class="confirmation-code hidden" style="display:none !important;" aria-hidden="true">
         <span id="confirmationCode"></span>
       <div class="finish-actions">
@@ -903,6 +875,7 @@
         els.finishIcon.classList.add('sending');
         els.finishTitle.textContent = 'Respuestas recibidas';
         els.finishMessage.textContent = 'El cuestionario se cerró correctamente. Por favor espere mientras se registran sus respuestas';
+        centrarMensajeFinal();
         els.confirmationBox.classList.add('hidden');
         els.retrySubmitBtn.classList.add('hidden');
         window.scrollTo({ top: 0, behavior: 'auto' });
@@ -913,11 +886,21 @@
         els.finishIcon.classList.remove('sending');
         els.finishTitle.textContent = 'Respuestas enviadas';
         els.finishMessage.textContent = 'Gracias por completar el cuestionario. Sus respuestas fueron registradas correctamente.';
+        centrarMensajeFinal();
         els.confirmationCode.textContent = state.sessionToken.replaceAll('-', '').slice(0, 10).toUpperCase();
         els.confirmationBox.classList.remove('hidden');
         els.retrySubmitBtn.classList.add('hidden');
       }
 
+      function centrarMensajeFinal() {
+        els.finishMessage.style.setProperty('text-align', 'center', 'important');
+        els.finishMessage.style.setProperty('text-align-last', 'center', 'important');
+        els.finishMessage.style.setProperty('text-justify', 'auto', 'important');
+        els.finishMessage.style.setProperty('max-width', '720px', 'important');
+        els.finishMessage.style.setProperty('margin-left', 'auto', 'important');
+        els.finishMessage.style.setProperty('margin-right', 'auto', 'important');
+        els.finishMessage.style.setProperty('display', 'block', 'important');
+      }
       function showFinishError(message) {
         showOnly('finish');
         state.view = 'finish';
