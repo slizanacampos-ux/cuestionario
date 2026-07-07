@@ -211,24 +211,30 @@
       .action-group { width: 100%; }
       .action-group button, .question-actions > button { flex: 1; }
       .review-item { grid-template-columns: 1fr; }
-      /* Centrar mensajes de la pantalla final */
+      /* Centrado definitivo de la pantalla final */
       #finish,
+      #finish *,
       #finishTitle,
       #finishMessage,
       #confirmationBox,
       .finish-actions {
         text-align: center !important;
       }
-
-      #finishMessage {
-        max-width: 680px;
-        margin-left: auto;
-        margin-right: auto;
+      
+      #finishMessage,
+      #finish p {
+        display: block !important;
+        max-width: 720px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        text-align: center !important;
+        text-justify: auto !important;
       }
       
       #finishTitle {
-        margin-left: auto;
-        margin-right: auto;
+        text-align: center !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
       }
       
       .finish-actions {
