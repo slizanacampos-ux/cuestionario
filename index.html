@@ -211,6 +211,29 @@
       .action-group { width: 100%; }
       .action-group button, .question-actions > button { flex: 1; }
       .review-item { grid-template-columns: 1fr; }
+      /* Centrar mensajes de la pantalla final */
+      #finish,
+      #finishTitle,
+      #finishMessage,
+      #confirmationBox,
+      .finish-actions {
+        text-align: center !important;
+      }
+
+      #finishMessage {
+        max-width: 680px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      
+      #finishTitle {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      
+      .finish-actions {
+        justify-content: center !important;
+      }
       #confirmationBox,
       .confirmation-code {
       display: none !important;
