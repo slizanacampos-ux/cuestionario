@@ -1,0 +1,1111 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Cuestionario interactivo sobre pensamiento probabilístico orientado a la toma de decisiones y conocimiento didáctico para la enseñanza de la probabilidad.">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Cuestionario sobre pensamiento probabilístico orientado a la toma de decisiones y conocimiento didáctico para la enseñanza de la probabilidad</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --surface: #ffffff;
+      --surface-2: #eef4f7;
+      --text: #172631;
+      --muted: #61717e;
+      --line: #d8e1e8;
+      --primary: #0f6e8c;
+      --primary-dark: #0a5269;
+      --accent: #e69a28;
+      --success: #287a56;
+      --danger: #b63c45;
+      --shadow: 0 18px 55px rgba(31, 53, 72, .12);
+      --radius: 22px;
+      --context-bg: #f4f9fd;
+      --context-line: #9bc4dc;
+      --student-bg: #fff7ef;
+      --student-line: #e6bd8f;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 7% 0%, rgba(15, 110, 140, .12), transparent 30%),
+        radial-gradient(circle at 100% 8%, rgba(230, 154, 40, .10), transparent 26%),
+        var(--bg);
+    }
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+    .hidden { display: none !important; }
+    .page-shell { width: min(1080px, calc(100% - 28px)); margin: 0 auto; padding: 26px 0 48px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 18px; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 850; letter-spacing: -.02em; }
+    .brand-mark { width: 42px; height: 42px; border-radius: 13px; display: grid; place-items: center; color: #fff; background: linear-gradient(135deg, var(--primary), #18a0b6); box-shadow: 0 10px 24px rgba(15, 110, 140, .24); }
+    .save-status { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: rgba(255,255,255,.88); padding: 8px 12px; border-radius: 999px; font-size: .88rem; color: var(--muted); backdrop-filter: blur(8px); }
+    .save-dot { width: 9px; height: 9px; border-radius: 50%; background: #a9b5c0; }
+    .save-status.saved .save-dot { background: var(--success); }
+    .save-status.saving .save-dot { background: var(--accent); animation: pulse 1s infinite; }
+    .save-status.error .save-dot { background: var(--danger); }
+    @keyframes pulse { 50% { opacity: .35; } }
+    .card { background: rgba(255,255,255,.97); border: 1px solid rgba(216, 225, 232, .95); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+    .hero { display: block; min-height: auto; }
+    .hero-copy { padding: clamp(30px, 5vw, 62px); display: flex; flex-direction: column; justify-content: center; }
+    .eyebrow { display: inline-flex; width: fit-content; padding: 7px 11px; border-radius: 999px; background: #e7f4f7; color: var(--primary-dark); font-size: .82rem; font-weight: 850; text-transform: uppercase; letter-spacing: .08em; }
+    h1 { margin: 18px 0 16px; font-size: clamp(2rem, 4vw, 3.3rem); line-height: 1.05; letter-spacing: -.045em; text-align: center; }
+    h2 { margin: 8px 0 18px; font-size: clamp(1.7rem, 3.6vw, 2.65rem); letter-spacing: -.04em; text-align: center; }
+    h3 { text-align: center; }
+    .lead { font-size: 1.08rem; line-height: 1.65; color: var(--muted); max-width: 680px; margin: 0 0 24px; }
+    .feature-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 10px 0 26px; }
+    .feature { border: 1px solid var(--line); background: #fbfcfd; border-radius: 15px; padding: 13px; font-size: .87rem; color: var(--muted); }
+    .feature strong { display: block; color: var(--text); margin-bottom: 3px; }
+    .hero-side { position: relative; padding: 36px; color: white; background: linear-gradient(155deg, #0d5d78, #0f7f99 60%, #2aa6b9); display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
+    .hero-side::before, .hero-side::after { content: ""; position: absolute; border-radius: 50%; border: 1px solid rgba(255,255,255,.17); }
+    .hero-side::before { width: 330px; height: 330px; top: -100px; right: -120px; }
+    .hero-side::after { width: 240px; height: 240px; bottom: -100px; left: -85px; }
+    .side-card { position: relative; z-index: 1; border: 1px solid rgba(255,255,255,.25); background: rgba(255,255,255,.12); border-radius: 18px; padding: 20px; backdrop-filter: blur(7px); }
+    .side-card + .side-card { margin-top: 14px; }
+    .side-card strong { display: block; font-size: 1.05rem; margin-bottom: 7px; }
+    .side-card span { color: rgba(255,255,255,.82); line-height: 1.5; font-size: .9rem; }
+    .form-grid { display: grid; gap: 14px; }
+    .identity-grid { display: grid; grid-template-columns: 1.25fr .95fr; gap: 14px; }
+    .field { display: grid; gap: 7px; }
+    label { font-weight: 760; font-size: .94rem; }
+    input[type="text"], input[type="number"], textarea { width: 100%; border: 1px solid var(--line); border-radius: 13px; background: #fff; color: var(--text); padding: 13px 14px; outline: none; transition: border-color .2s, box-shadow .2s; }
+    input:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(15, 110, 140, .11); }
+    textarea { min-height: 150px; resize: vertical; line-height: 1.55; }
+    .consent { display: flex; gap: 10px; align-items: flex-start; color: var(--muted); font-size: .9rem; line-height: 1.48; }
+    .consent input { margin-top: 4px; accent-color: var(--primary); }
+    .primary-btn, .secondary-btn, .ghost-btn { border: 0; border-radius: 13px; padding: 13px 18px; font-weight: 820; transition: transform .16s, box-shadow .16s, background .16s; }
+    .primary-btn { color: #fff; background: linear-gradient(135deg, var(--primary), #168ca6); box-shadow: 0 11px 24px rgba(15,110,140,.24); }
+    .primary-btn:hover { transform: translateY(-1px); box-shadow: 0 14px 28px rgba(15,110,140,.28); }
+    .primary-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .secondary-btn { background: #eaf2f5; color: var(--primary-dark); }
+    .ghost-btn { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+    .resume-box { display: none; border: 1px solid #c9dee4; background: #f0f8fa; border-radius: 15px; padding: 14px; margin-bottom: 18px; color: #315f6b; }
+    .resume-box.visible { display: grid; gap: 8px; }
+    .resume-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+    .banner { display: none; border-radius: 13px; padding: 12px 14px; margin-bottom: 15px; border: 1px solid; line-height: 1.45; font-size: .9rem; }
+    .banner.visible { display: block; }
+    .banner.warning { background: #fff7e8; border-color: #edd2a2; color: #775018; }
+    .banner.error { background: #fff0f1; border-color: #ebc2c6; color: #8a333b; }
+    .banner.info { background: #edf7f9; border-color: #c8e0e6; color: #255d6c; }
+    .block-intro, .question-wrap, .review, .finish { display: none; }
+    .block-intro.active, .question-wrap.active, .review.active, .finish.active { display: block; }
+    .block-intro .inner { padding: clamp(28px, 5vw, 54px); }
+    .block-intro-grid { display: grid; grid-template-columns: 1fr; gap: 24px; align-items: start; }
+    .block-chip { display: inline-flex; width: fit-content; padding: 8px 12px; border-radius: 999px; background: #e7f4f7; color: var(--primary-dark); font-size: .82rem; font-weight: 850; text-transform: uppercase; letter-spacing: .08em; }
+    .block-copy p { color: var(--muted); line-height: 1.7; margin: 0 0 14px; }
+    #blockDescription.hidden { display: none; }
+    .block-start-action { justify-content: center; margin-top: 6px; }
+    .block-start-action .primary-btn { min-width: 210px; }
+
+    .block-points { display: grid; gap: 10px; margin: 18px 0 24px; }
+    .block-point { padding: 14px; border-radius: 14px; border: 1px solid var(--line); background: #fbfcfd; }
+    .block-point strong { display: block; margin-bottom: 4px; }
+    .block-side { padding: 20px; border-radius: 18px; border: 1px solid var(--line); background: linear-gradient(180deg, #f8fcfd, #eff6f8); margin: 6px 0 22px; }
+    .block-side strong { display: block; margin-bottom: 8px; }
+    .block-side ul { margin: 0; padding-left: 20px; color: var(--muted); line-height: 1.6; }
+    .progress-header { padding: 20px 24px 0; background: #fff; }
+    .progress-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--muted); font-size: .86rem; font-weight: 720; }
+    .progress-track { height: 9px; border-radius: 999px; background: #e9eff3; overflow: hidden; margin-top: 10px; }
+    .progress-fill { height: 100%; width: 8%; background: linear-gradient(90deg, var(--primary), #23a5b6); border-radius: inherit; transition: width .3s; }
+    .question-layout { padding: clamp(24px, 4vw, 44px); }
+    .scenario-block { display: block; }
+    #scenarioBlock.with-figure {
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) minmax(190px, 260px) !important;
+      grid-template-areas: "texto figura" !important;
+      column-gap: 24px !important;
+      row-gap: 0 !important;
+      align-items: start !important;
+    }
+    #scenarioBlock.with-figure > .scenario-text {
+      grid-area: texto !important;
+      min-width: 0;
+    }
+    #scenarioBlock.with-figure > .original-figure {
+      grid-area: figura !important;
+      align-self: start !important;
+    }
+    .item-kicker { color: var(--primary); font-size: .83rem; font-weight: 850; text-transform: uppercase; letter-spacing: .08em; text-align: center; }
+    .scenario-text { color: #334653; line-height: 1.72; font-size: 1rem; }
+    .scenario-text p { margin: 0 0 13px; }
+    .scenario-text ul { margin: 8px 0 15px 21px; padding: 0; }
+    .scenario-text li { margin: 7px 0; }
+    .scenario-text,
+    .scenario-text p,
+    .scenario-text li,
+    .prompt,
+    .option span,
+    .lead,
+    .feature,
+    .side-card span,
+    .consent span,
+    .review-lead,
+    .review-choice,
+    .finish p,
+    .block-copy p,
+    .block-side li,
+    .helper,
+    .field label,
+    .callout-content,
+    .callout-content p,
+    .callout-content li,
+    .student-quote,
+    .validation {
+      text-align: justify !important;
+      text-justify: inter-word !important;
+      hyphens: auto;
+      -webkit-hyphens: auto;
+    }
+    .prompt { margin: 24px 0 13px; font-size: 1.08rem; font-weight: 850; }
+    .options { display: grid; gap: 10px; }
+    .option { display: flex; align-items: flex-start; gap: 11px; border: 1px solid var(--line); border-radius: 14px; padding: 13px 14px; background: #fff; transition: border-color .16s, background .16s, transform .16s; cursor: pointer; line-height: 1.45; }
+    .option:hover { transform: translateY(-1px); border-color: #9fc4cf; }
+    .option.selected { border-color: var(--primary); background: #eef8fa; box-shadow: 0 0 0 3px rgba(15,110,140,.08); }
+    .option input { margin-top: 4px; accent-color: var(--primary); }
+    .other-field { display: none; margin-top: 12px; }
+    .other-field.visible { display: grid; gap: 7px; }
+    .justification { margin-top: 22px; }
+    .helper { color: var(--muted); font-size: .82rem; }
+    .validation { min-height: 22px; color: var(--danger); font-weight: 700; margin-top: 10px; }
+    .question-actions { display: flex; justify-content: space-between; align-items: center; gap: 12px; border-top: 1px solid var(--line); padding: 18px 24px; background: #fbfcfd; }
+    .action-group { display: flex; gap: 10px; flex-wrap: wrap; }
+    .original-figure { display: none; margin: 4px 0 0; border: 1px solid var(--line); border-radius: 16px; padding: 10px; background: #fff; max-width: 260px; }
+    .original-figure.visible { display: block; }
+    .original-figure img { width: 100%; max-height: 260px; object-fit: contain; height: auto; display: block; border-radius: 10px; }
+    .scenario-box { border-radius: 18px; padding: 16px 18px; margin: 0 0 16px; border: 1px solid var(--line); }
+    .scenario-box.context { background: var(--context-bg); border-color: var(--context-line); }
+    .scenario-box.student { background: var(--student-bg); border-color: var(--student-line); }
+    .scenario-box-header { font-weight: 860; font-size: .92rem; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; }
+    .scenario-box.context .scenario-box-header { color: #245c80; }
+    .scenario-box.student .scenario-box-header { color: #8c5b21; }
+    .student-quote { margin: 0; font-style: italic; line-height: 1.72; color: #523e2a; }
+    .review { padding: clamp(24px, 4vw, 42px); }
+    .review-list { display: grid; gap: 12px; margin-top: 18px; }
+    .review-item { display: grid; grid-template-columns: 44px 1fr auto; gap: 12px; align-items: center; border: 1px solid var(--line); border-radius: 14px; padding: 13px; }
+    .review-number { width: 38px; height: 38px; border-radius: 11px; display: grid; place-items: center; background: #eaf4f7; color: var(--primary-dark); font-weight: 900; }
+    .review-title { font-weight: 780; }
+    .review-choice { color: var(--muted); font-size: .92rem; }
+    .edit-btn { border: 0; border-radius: 11px; padding: 10px 13px; background: #eef4f7; color: var(--primary-dark); font-weight: 760; }
+    .review-actions, .finish-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 18px; }
+    .finish { padding: clamp(26px, 4vw, 48px); text-align: center; }
+    .finish-icon { width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; margin: 0 auto 18px; background: #e7f6ee; color: var(--success); font-size: 2.2rem; font-weight: 900; }
+    .finish-icon.sending { background: #eef4f8; color: var(--primary); }
+    .confirmation-code { display: inline-flex; align-items: center; gap: 8px; padding: 11px 15px; border-radius: 999px; border: 1px solid var(--line); background: #fbfcfd; font-weight: 760; margin-top: 10px; }
+    @media (max-width: 920px) {
+      .hero, .block-intro-grid { grid-template-columns: 1fr; }
+      #scenarioBlock.with-figure { grid-template-columns: 1fr !important; grid-template-areas: "texto" "figura" !important; }
+    }
+    @media (max-width: 720px) {
+      .page-shell { width: min(100%, calc(100% - 20px)); }
+      .topbar { align-items: flex-start; }
+      .identity-grid, .feature-row { grid-template-columns: 1fr; }
+      .question-actions, .review-actions { flex-direction: column; align-items: stretch; }
+      .action-group { width: 100%; }
+      .action-group button, .question-actions > button { flex: 1; }
+      .review-item { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-shell">
+    <header class="topbar">
+      <div class="brand"><div class="brand-mark" aria-hidden="true">P</div><div>Cuestionario PP-TD y conocimiento didáctico</div></div>
+      <div id="saveStatus" class="save-status" aria-live="polite"><span class="save-dot"></span><span id="saveStatusText">Sin iniciar</span></div>
+    </header>
+
+    <div id="systemBanner" class="banner"></div>
+
+    <section id="landing" class="card hero">
+      <div class="hero-copy">
+        <h1>Cuestionario sobre pensamiento probabilístico orientado a la toma de decisiones y conocimiento didáctico para la enseñanza de la probabilidad</h1>
+
+        <div class="feature-row" aria-label="Características del cuestionario">
+          <div class="feature"><strong>Duración estimada</strong>30–40 minutos</div>
+          <div class="feature"><strong>Bloque A</strong>Toma de decisiones en situaciones de incertidumbre. En cada situación deberá seleccionar una alternativa y justificar la decisión tomada.</div>
+          <div class="feature"><strong>Bloque B</strong>Análisis didáctico de razonamientos estudiantiles ante situaciones de incertidumbre. En cada escenario deberá interpretar la respuesta de un/a estudiante y proponer una acción didáctica concreta.</div>
+        </div>
+
+        <div id="resumeBox" class="resume-box">
+          <strong>Hay un cuestionario en curso en este dispositivo.</strong>
+          <span>Puede continuar donde quedó o eliminar ese progreso para iniciar una nueva aplicación.</span>
+          <div class="resume-buttons"><button id="resumeBtn" class="secondary-btn" type="button">Continuar</button><button id="discardBtn" class="ghost-btn" type="button">Comenzar de nuevo</button></div>
+        </div>
+
+        <form id="startForm" class="form-grid" novalidate>
+          <div class="field">
+            <label for="fullName">Nombre completo</label>
+            <input id="fullName" type="text" maxlength="140" autocomplete="name" placeholder="Nombre y apellidos" required>
+          </div>
+          <div class="identity-grid">
+            <div class="field">
+              <label for="university">Universidad</label>
+              <input id="university" type="text" maxlength="160" autocomplete="organization" placeholder="Nombre de la universidad" required>
+            </div>
+            <div class="field">
+              <label for="entryYear">Año de ingreso a la carrera</label>
+              <input id="entryYear" type="number" inputmode="numeric" min="1980" max="2100" placeholder="Ejemplo: 2023" required>
+            </div>
+          </div>
+          <label class="consent">
+            <input id="consent" type="checkbox" required>
+            <span>Declaro que he leído la información del estudio, acepto participar voluntariamente y autorizo el registro de mi nombre, universidad, año de ingreso y respuestas para los fines informados.</span>
+          </label>
+          <button class="primary-btn" type="submit">Comenzar cuestionario</button>
+          <div id="startValidation" class="validation" role="alert"></div>
+        </form>
+      </div>
+
+    </section>
+
+    <section id="blockIntro" class="card block-intro" aria-live="polite">
+      <div class="inner">
+        <div class="block-intro-grid">
+          <div class="block-copy">
+            <div id="blockChip" class="block-chip">Bloque A</div>
+            <h2 id="blockTitle"></h2>
+            <p id="blockDescription"></p>
+            <div id="blockPoints" class="block-points"></div>
+            <aside class="block-side">
+              <strong>Antes de continuar</strong>
+              <ul id="blockChecklist"></ul>
+            </aside>
+            <div class="action-group block-start-action"><button id="blockStartBtn" class="primary-btn" type="button">Comenzar Bloque A</button></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="questionWrap" class="card question-wrap" aria-live="polite">
+      <div class="progress-header">
+        <div class="progress-meta"><span id="progressLabel">Bloque A · Situación 1 de 8</span><span id="progressPercent">8 % del recorrido</span></div>
+        <div class="progress-track" aria-hidden="true"><div id="progressFill" class="progress-fill"></div></div>
+      </div>
+
+      <div id="questionLayout" class="question-layout">
+        <article class="question-main">
+          <div id="itemKicker" class="item-kicker">Bloque A · Situación 1</div>
+          <h2 id="itemTitle"></h2>
+          <div id="scenarioBlock" class="scenario-block">
+            <div id="scenarioText" class="scenario-text"></div>
+            <figure id="originalFigure" class="original-figure">
+              <img src="assets/situacion5_ruta_taxi.png?v=4" loading="eager" decoding="sync" alt="Diagrama original de la situación 5: rutas I y II, salidas R y B, y dos cámaras.">
+            </figure>
+          </div>
+
+          <section id="decisionSection">
+            <div id="itemPrompt" class="prompt"></div>
+            <div id="options" class="options" role="radiogroup" aria-label="Alternativas de respuesta"></div>
+            <div id="otherField" class="other-field"><label for="otherText">Especifique su respuesta</label><input id="otherText" type="text" maxlength="400" placeholder="Escriba su propuesta"></div>
+            <div class="field justification"><label for="justification">Justifique su decisión</label><textarea id="justification" maxlength="3000"></textarea><div class="helper"><span id="charCount">0</span>/3000 caracteres</div></div>
+          </section>
+
+          <section id="didacticSection" class="hidden">
+            <div class="field justification"><label for="interpretation">¿Cómo interpreta la respuesta del/de la estudiante? Justifique.</label><textarea id="interpretation" maxlength="3500"></textarea><div class="helper"><span id="interpretationCount">0</span>/3500 caracteres</div></div>
+            <div class="field justification"><label for="didacticAction">Según corresponda, describa al menos una acción concreta para fortalecer, profundizar o complementar el razonamiento del/de la estudiante.</label><textarea id="didacticAction" maxlength="3500"></textarea><div class="helper"><span id="didacticActionCount">0</span>/3500 caracteres</div></div>
+          </section>
+
+          <div id="itemValidation" class="validation" role="alert"></div>
+        </article>
+      </div>
+
+      <footer class="question-actions">
+        <button id="exitBtn" class="ghost-btn" type="button">Guardar y salir</button>
+        <div class="action-group"><button id="prevBtn" class="secondary-btn" type="button">Anterior</button><button id="nextBtn" class="primary-btn" type="button">Siguiente</button></div>
+      </footer>
+    </section>
+
+    <section id="review" class="card review">
+      <span class="eyebrow">Revisión final</span>
+      <h2>Revise sus respuestas</h2>
+      <p class="review-lead">Puede volver a cualquier situación o escenario antes de enviar. El envío final actualiza una sola fila de Google Sheets con los datos de identificación y las doce respuestas del instrumento.</p>
+      <div id="reviewList" class="review-list"></div>
+      <div class="review-actions"><button id="backToQuestions" class="secondary-btn" type="button">Volver al cuestionario</button><button id="submitBtn" class="primary-btn" type="button">Enviar respuestas</button></div>
+      <div id="submitValidation" class="validation" role="alert"></div>
+    </section>
+
+    <section id="finish" class="card finish">
+      <div id="finishIcon" class="finish-icon" aria-hidden="true">✓</div>
+      <h2 id="finishTitle">Respuestas enviadas</h2>
+      <p id="finishMessage">Gracias por completar el cuestionario.</p>
+      <div id="confirmationBox" class="confirmation-code">Código de confirmación: <span id="confirmationCode"></span></div>
+      <div class="finish-actions">
+        <button id="retrySubmitBtn" class="primary-btn hidden" type="button">Reintentar envío</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="config.js"></script>
+  <script>
+    (() => {
+      'use strict';
+
+      const CONFIG = window.APP_CONFIG || {};
+      const ENDPOINT = String(CONFIG.GOOGLE_APPS_SCRIPT_URL || '').trim();
+      const REMOTE_ENABLED = /^https:\/\/script\.google\.com\/macros\/s\/.+\/exec(?:\?.*)?$/.test(ENDPOINT);
+      const STORAGE_KEY = 'pp_td_active_submission_v3';
+      const CURRENT_YEAR = new Date().getFullYear();
+
+      const BLOCKS = {
+        A: {
+          id: 'A',
+          label: 'Bloque A',
+          count: 8,
+          title: 'Toma de decisiones en situaciones de incertidumbre',
+          description: '',
+          points: [
+            { title: '¿Qué hacer?', text: 'Para cada situación, seleccione la alternativa que represente mejor la decisión que tomaría y justifique su decisión.' },
+            { title: '¿Cómo avanzar?', text: 'Se presenta una situación por pantalla que debe responder para avanzar a la siguiente. Puede volver a la situación anterior cuando lo necesite.' }
+          ],
+          checklist: ['Lea con atención todos los antecedentes antes de decidir.', 'No se entregará retroalimentación durante la aplicación.', 'Sus respuestas se guardarán progresivamente.']
+        },
+        B: {
+          id: 'B',
+          label: 'Bloque B',
+          count: 4,
+          title: 'Análisis didáctico de razonamientos estudiantiles ante situaciones de incertidumbre',
+          description: '',
+          points: [
+            { title: '¿Qué hacer?', text: 'Para cada escenario, interprete el razonamiento que sustenta la respuesta de estudiantes y proponga al menos una acción didáctica concreta.' },
+            { title: '¿Cómo avanzar?', text: 'Se presenta un escenario por pantalla que debe responder para avanzar al siguiente. Puede volver al escenario anterior cuando lo necesite.' }
+          ],
+          checklist: ['El escenario aparecerá en dos recuadros diferenciados.', 'El primer recuadro presenta la situación de clase.', 'El segundo recuadro presenta literalmente la respuesta del o de la estudiante.']
+        }
+      };
+
+            const items = [
+        {
+          block: 'A', seq: 1, kind: 'decision',
+          title: 'Asignación de personal',
+          body: `<p>En un centro de distribución, un sistema automático envía cada paquete a uno de cuatro sectores: A, B, C o D. Cada paquete se asigna de manera independiente y los cuatro sectores tienen la misma probabilidad de recibirlo.</p><p>Durante el turno anterior, los últimos ocho paquetes fueron enviados a los sectores A, B o C; ninguno fue enviado al sector D.</p><p>Para el próximo turno se espera recibir una gran cantidad de paquetes. Como todos requieren aproximadamente el mismo tiempo de procesamiento, el supervisor debe decidir cómo distribuir al personal entre los cuatro sectores.</p>`,
+          prompt: 'Si usted fuera el supervisor, ¿cómo distribuiría al personal?',
+          options: ['Asignaría la misma cantidad de trabajadores en cada sector.','Asignaría más trabajadores al sector D.','Asignaría la misma cantidad de trabajadores a los sectores A, B y C, y ninguno al sector D.','Otra respuesta.']
+        },
+        {
+          block: 'A', seq: 2, kind: 'decision',
+          title: 'Registro de nacimientos',
+          body: `<p>En una ciudad hay dos hospitales:</p><ul><li>un hospital pequeño, en el que nacen aproximadamente 15 bebés por día;</li><li>un hospital grande, en el que nacen aproximadamente 145 bebés por día.</li></ul><p>En ambos hospitales, la probabilidad de que un bebé sea varón es aproximadamente del 50 % por día.</p><p>Al finalizar un día, el equipo encargado de revisar las estadísticas recibe un informe en el que se señala que aproximadamente el 67 % de los nacimientos correspondió a varones. Sin embargo, el nombre del hospital no aparece en el informe.</p><p>Es urgente que el equipo resuelva este problema revisando en detalle los datos disponibles.</p>`,
+          prompt: '¿A cuál de los dos hospitales considera que corresponde el registro?',
+          options: ['Corresponde al hospital pequeño.','Corresponde al hospital grande.','Podría corresponder a cualquiera de los dos hospitales.','Otra respuesta.']
+        },
+        {
+          block: 'A', seq: 3, kind: 'decision',
+          title: 'Resultado positivo',
+          body: `<p>En una ciudad, 1 de cada 100 personas tiene una enfermedad poco común. Existe una prueba para detectarla:</p><ul><li>si una persona tiene la enfermedad, la prueba da positivo en el 90 % de los casos;</li><li>si una persona no tiene la enfermedad, la prueba también puede dar positivo en el 5 % de los casos.</li></ul><p>A una persona elegida al azar se le aplica la prueba y el resultado es positivo. Además, la persona señala que ha presentado algunos síntomas compatibles con la enfermedad.</p><p>El equipo de salud debe decidir qué información comunicarle a partir de los antecedentes disponibles.</p>`,
+          prompt: 'Si usted formara parte del equipo de salud, ¿qué decisión tomaría?',
+          options: ['Comunicaría a la persona que sí tiene la enfermedad y que los síntomas que presenta se deben a ella.','Comunicaría a la persona que es muy probable que tenga la enfermedad, pero que no es posible afirmar aún que los síntomas se deban necesariamente a ella.','Comunicaría a la persona que, con la información disponible, no es posible confirmar que tenga la enfermedad y que se requiere una evaluación complementaria.','Otra respuesta.']
+        },
+        {
+          block: 'A', seq: 4, kind: 'decision',
+          title: 'Códigos de acceso',
+          body: `<p>Una institución necesita generar códigos de acceso de cuatro dígitos utilizando únicamente los números 1, 2, 3, 4, 5 y 6. El orden de los dígitos es importante; por ejemplo, los códigos 1234 y 4321 se consideran diferentes.</p><p>Se están evaluando dos procedimientos:</p><ul><li><strong>Procedimiento A:</strong> los dígitos pueden repetirse. Por ejemplo, se permiten códigos como 1135 o 4442.</li><li><strong>Procedimiento B:</strong> los cuatro dígitos deben ser diferentes. Por ejemplo, se permiten códigos como 1352, pero no 1135.</li></ul><p>En ambos procedimientos, cada código permitido será generado al azar con la misma probabilidad.</p><p>La institución quiere escoger el procedimiento que produzca la mayor cantidad de códigos diferentes, para disminuir la posibilidad de que dos usuarios reciban el mismo código.</p>`,
+          prompt: '¿Qué procedimiento recomendaría utilizar?',
+          options: ['Recomendaría el procedimiento A.','Recomendaría el procedimiento B.','Cualquiera de los dos procedimientos.','Otra respuesta.']
+        },
+        {
+          block: 'A', seq: 5, kind: 'decision', figure: true,
+          title: 'Ruta del taxi',
+          body: `<p>En un centro comercial, los taxis ingresan por el acceso E. Al llegar a la primera bifurcación, eligen al azar entre los caminos I y II, ambos con la misma probabilidad.</p><ul><li>Los taxis que toman el camino I salen por R.</li><li>Los taxis que toman el camino II llegan a una segunda bifurcación, donde eligen al azar entre las salidas R y B, ambas con la misma probabilidad.</li></ul><p>El centro comercial dispone de dos cámaras: una está ubicada en el camino I y la otra en el camino II.</p><p>Últimamente se han registrado varios accidentes en las bifurcaciones. El equipo de seguridad debe establecer un procedimiento para los casos en que se sabe que un taxi salió por R, pero no se conoce el camino por el que venía.</p><p>Como revisar las grabaciones requiere tiempo, se comenzará siempre por una de las dos cámaras.</p>`,
+          prompt: '¿Qué recomendaría al equipo de seguridad?',
+          options: ['Revisar primero la cámara correspondiente al camino I.','Revisar primero la cámara correspondiente al camino II.','Revisar indistintamente cualquiera de las dos cámaras.','Otra respuesta.']
+        },
+        {
+          block: 'A', seq: 6, kind: 'decision',
+          title: 'Premios para la feria escolar',
+          body: `<p>En una feria escolar se instalará un juego en el que cada participantes lanzará dos dados normales una sola vez. Según el resultado obtenido, podrá recibir uno de los siguientes premios:</p><ul><li><strong>Premio A:</strong> se entrega cuando aparece un 5 y un 6, sin importar el orden.</li><li><strong>Premio B:</strong> se entrega cuando aparecen dos 6.</li></ul><p>Se espera una alta participación y ambos premios tienen un costo similar.</p><p>Antes de la feria, el equipo organizador debe decidir qué cantidad comprar de cada premio, procurando evitar que falten o sobren muchos premios.</p>`,
+          prompt: 'Si usted fuera parte del equipo organizador, ¿qué decisión tomaría?',
+          options: ['Comprar una mayor cantidad del premio A.','Comprar una mayor cantidad del premio B.','Comprar la misma cantidad de ambos premios.','Otra respuesta.']
+        },
+        {
+          block: 'A', seq: 7, kind: 'decision',
+          title: 'Prueba del sistema de alertas',
+          body: `<p>Una empresa instalará un sistema de seguridad compuesto por tres sensores: sensor de temperatura, sensor de humo y sensor de gas. En un momento determinado, cada sensor puede encontrarse en uno de dos estados: activado o desactivado. El estado de un sensor no determina el estado de los demás.</p><p>Antes de instalar el sistema, el equipo de seguridad dispone de tiempo para realizar ocho pruebas y debe escoger cómo distribuirlas entre las distintas configuraciones de los sensores. Para orientar esta decisión, se consideran los informes internos de las últimas semanas, en los que aparecieron reiteradamente tres configuraciones: los tres sensores desactivados; solamente el sensor de humo activado; y los sensores de temperatura y humo activados.</p><p>A partir de estos antecedentes, se proponen dos planes:</p><ul><li><strong>Plan A:</strong> concentrar las ocho pruebas en las configuraciones que han aparecido reiteradamente en los informes internos.</li><li><strong>Plan B:</strong> distribuir las ocho pruebas de manera que se revise una vez cada configuración posible de los tres sensores.</li></ul><p>El equipo debe aprobar el plan que permita evaluar de manera más completa y confiable el funcionamiento del sistema.</p>`,
+          prompt: '¿Qué plan recomendaría aprobar?',
+          options: ['Recomendaría el Plan A.','Recomendaría el Plan B.','Cualquiera de los dos planes.','Otra respuesta.']
+        },
+        {
+          block: 'A', seq: 8, kind: 'decision',
+          title: 'Alerta de desborde',
+          body: `<p>Una municipalidad utiliza un protocolo para decidir cuándo activar un equipo preventivo ante posibles desbordes de un río durante la temporada de invierno. Según el protocolo, el equipo debe activarse cuando la probabilidad estimada de desborde sea igual o superior al 30 %.</p><p>Se revisaron 100 días en los que las condiciones del río y las precipitaciones fueron similares a las actuales. En 20 de esos días se produjo un desborde.</p><p>Uno de esos 20 desbordes fue de gran magnitud, provocó daños importantes y recibió amplia cobertura en los medios de comunicación locales. Debido a la gravedad de sus consecuencias, este episodio todavía es recordado por la comunidad y por las autoridades.</p><p>Actualmente estamos iniciando la temporada invernal y durante estos días el clima ha estado más lluvioso. La municipalidad debe decidir si activa o no el equipo preventivo.</p>`,
+          prompt: 'Si usted formara parte del equipo responsable, ¿qué decisión tomaría?',
+          options: ['Activaría el equipo preventivo.','No activaría el equipo preventivo.','Postergaría la decisión hasta obtener más datos.','Otra respuesta.']
+        },
+        {
+          block: 'B', seq: 1, kind: 'didactic',
+          title: 'Elección del color oculto',
+          classIntro: 'En una clase de probabilidad, se propone la siguiente situación:',
+          scenarioBody: `<p>Una bolsa contiene cinco bolitas: dos rojas, dos azules y una verde. Se extrae una primera bolita sin mirar y se guarda en una caja. Sin devolverla a la bolsa, se extrae una segunda bolita y se observa que es azul.</p><p>En un juego, el participante debe escoger entre rojo y azul como posible color de la primera bolita. Aunque la primera bolita también podría ser verde, las reglas del juego solo permiten elegir entre rojo y azul.</p>`,
+          studentIntro: 'Un/una estudiante responde:',
+          studentResponse: '“Elegiría al azar entre rojo y azul, porque inicialmente había la misma cantidad de bolitas de ambos colores. Saber que la segunda bolita fue azul no aporta información sobre el color de la primera”.'
+        },
+        {
+          block: 'B', seq: 2, kind: 'didactic',
+          title: 'Revisión de un generador aleatorio',
+          classIntro: 'En una clase de probabilidad, se propone la siguiente situación:',
+          scenarioBody: `<p>Una empresa administra una plataforma digital y utiliza dos programas informáticos para generar códigos temporales de verificación. Cada código tiene cinco cifras. En cada posición pueden aparecer los números del 1 al 9, todos con la misma probabilidad y de manera independiente. Los dígitos pueden repetirse.</p><p>El equipo técnico debe verificar si alguno de los programas presenta indicios de funcionamiento inadecuado. Como parte de este procedimiento, se obtiene un único código generado por cada programa:</p><ul><li>el programa A generó el código 11111;</li><li>el programa B generó el código 58327.</li></ul><p>Con esta información, el equipo técnico debe decidir qué programa revisar en detalle.</p>`,
+          studentIntro: 'Un/una estudiante responde:',
+          studentResponse: '“Revisaría en detalle el programa A, porque 11111 no debería estar entre los códigos posibles de un generador aleatorio. Un código aleatorio debería parecerse más a 58327, con cifras diferentes y sin un patrón evidente”.'
+        },
+        {
+          block: 'B', seq: 3, kind: 'didactic',
+          title: 'Sistema de alerta en lotes de ampolletas',
+          classIntro: 'En una clase de probabilidad, se propone la siguiente situación:',
+          scenarioBody: `<p>En una fábrica de ampolletas, lo registros diarios muestran que, en cada lote, cerca del 10% de ampolletas resulta defectuosa. La fábrica produce dos tipo de lotes:</p><ul><li>un lote pequeño de 20 ampolletas;</li><li>un lote grande de 200 ampolletas.</li></ul><p>El equipo de control quiere implementar un sistema de alerta para detectar resultados poco habituales en la producción. Este sistema se activa cuando en un lote resultan defectuosas más del 20% de ampolletas.</p><p>Antes de usar este sistema, el equipo debe decidir si el mismo criterio de alerta puede aplicarse del mismo modo a los lotes pequeños y a los lotes grandes.</p>`,
+          studentIntro: 'Un/una estudiante responde:',
+          studentResponse: '“Usaría el mismo criterio para los dos tipos de lotes, porque en ambos normalmente cerca de 1 de cada 10 ampolletas sale defectuosa. Además, el criterio de alerta es el mismo: más de 2 defectuosas por cada 10. El tamaño del lote no cambia la decisión”.'
+        },
+        {
+          block: 'B', seq: 4, kind: 'didactic',
+          title: 'Puntajes en un juego con ruleta',
+          classIntro: 'En una clase de probabilidad, se propone la siguiente situación:',
+          scenarioBody: `<p>En una actividad escolar se utiliza una ruleta dividida en cuatro sectores del mismo tamaño: rojo, azul, verde y amarillo. La ruleta se gira dos veces en cada ronda.</p><p>Para asignar puntos, se consideran dos jugadas posibles:</p><ul><li><strong>Jugada A:</strong> se obtiene un punto si sale rojo en el primer giro y azul en el segundo, en ese orden.</li><li><strong>Jugada B:</strong> se obtiene un punto si salen rojo y azul en cualquier orden.</li></ul><p>Todos los equipos en la actividad jugarán con las mismas condiciones. Antes de comenzar, se debe decidir si ambas jugadas pueden valer el mismo puntaje o si es necesario modificar el puntaje de alguna de ellas.</p>`,
+          studentIntro: 'Un/una estudiante responde:',
+          studentResponse: '“Yo mantendría el mismo puntaje para ambas jugadas, porque en las dos tienen que salir los mismos colores: uno rojo y uno azul. Por eso, las dos jugadas tienen la misma posibilidad de ocurrir”.'
+        }
+      ];
+
+      const els = {
+        landing: document.getElementById('landing'),
+        blockIntro: document.getElementById('blockIntro'),
+        questionWrap: document.getElementById('questionWrap'),
+        review: document.getElementById('review'),
+        finish: document.getElementById('finish'),
+        systemBanner: document.getElementById('systemBanner'),
+        saveStatus: document.getElementById('saveStatus'),
+        saveStatusText: document.getElementById('saveStatusText'),
+        startForm: document.getElementById('startForm'),
+        fullName: document.getElementById('fullName'),
+        university: document.getElementById('university'),
+        entryYear: document.getElementById('entryYear'),
+        consent: document.getElementById('consent'),
+        startValidation: document.getElementById('startValidation'),
+        resumeBox: document.getElementById('resumeBox'), resumeBtn: document.getElementById('resumeBtn'), discardBtn: document.getElementById('discardBtn'),
+        blockChip: document.getElementById('blockChip'), blockTitle: document.getElementById('blockTitle'), blockDescription: document.getElementById('blockDescription'), blockPoints: document.getElementById('blockPoints'), blockChecklist: document.getElementById('blockChecklist'), blockStartBtn: document.getElementById('blockStartBtn'),
+        progressLabel: document.getElementById('progressLabel'), progressPercent: document.getElementById('progressPercent'), progressFill: document.getElementById('progressFill'),
+        itemKicker: document.getElementById('itemKicker'), itemTitle: document.getElementById('itemTitle'), scenarioText: document.getElementById('scenarioText'), itemPrompt: document.getElementById('itemPrompt'), options: document.getElementById('options'),
+        otherField: document.getElementById('otherField'), otherText: document.getElementById('otherText'), justification: document.getElementById('justification'), charCount: document.getElementById('charCount'),
+        didacticSection: document.getElementById('didacticSection'), decisionSection: document.getElementById('decisionSection'), interpretation: document.getElementById('interpretation'), didacticAction: document.getElementById('didacticAction'), interpretationCount: document.getElementById('interpretationCount'), didacticActionCount: document.getElementById('didacticActionCount'),
+        itemValidation: document.getElementById('itemValidation'), scenarioBlock: document.getElementById('scenarioBlock'), originalFigure: document.getElementById('originalFigure'),
+        prevBtn: document.getElementById('prevBtn'), nextBtn: document.getElementById('nextBtn'), exitBtn: document.getElementById('exitBtn'),
+        reviewList: document.getElementById('reviewList'), backToQuestions: document.getElementById('backToQuestions'), submitBtn: document.getElementById('submitBtn'), submitValidation: document.getElementById('submitValidation'), confirmationCode: document.getElementById('confirmationCode'),
+        finishIcon: document.getElementById('finishIcon'), finishTitle: document.getElementById('finishTitle'), finishMessage: document.getElementById('finishMessage'), confirmationBox: document.getElementById('confirmationBox'), retrySubmitBtn: document.getElementById('retrySubmitBtn')
+      };
+
+      els.entryYear.max = String(CURRENT_YEAR);
+      let state = emptyState();
+      let saveTimer = null;
+      let saveSequence = Promise.resolve();
+      let remoteStartPromise = null;
+
+      function emptyState() {
+        return { sessionToken: '', fullName: '', university: '', entryYear: '', currentIndex: 0, pendingBlock: null, view: 'landing', answers: {}, startedAt: '', itemEnteredAt: 0, completed: false, completionPending: false, remoteStarted: false };
+      }
+
+      function makeSessionToken() {
+        if (globalThis.crypto?.randomUUID) return crypto.randomUUID();
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+          const r = Math.random() * 16 | 0;
+          return (c === 'x' ? r : (r & 3 | 8)).toString(16);
+        });
+      }
+
+      function setSaveStatus(type, text) {
+        els.saveStatus.className = `save-status${type ? ` ${type}` : ''}`;
+        els.saveStatusText.textContent = text;
+      }
+
+      function showBanner(type, text) {
+        els.systemBanner.className = `banner visible ${type}`;
+        els.systemBanner.textContent = text;
+      }
+
+      function hideBanner() { els.systemBanner.className = 'banner'; els.systemBanner.textContent = ''; }
+
+      function persistLocal() {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (error) { console.warn('No se pudo guardar localmente', error); }
+      }
+
+      function readLocalState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return null;
+          const parsed = JSON.parse(raw);
+          if (!parsed?.sessionToken || parsed.completed) return null;
+          return parsed;
+        } catch {
+          return null;
+        }
+      }
+
+      function clearLocal() { localStorage.removeItem(STORAGE_KEY); }
+
+      function escapeHtml(value = '') {
+        return String(value).replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[char]);
+      }
+
+      function isOtherSelected(answer) { return answer?.selectedOption === 'Otra respuesta.'; }
+      function currentItem() { return items[state.currentIndex]; }
+      function currentItemNumber() { return state.currentIndex + 1; }
+      function getItemLabel(item) { return item.kind === 'decision' ? `Situación ${item.seq}` : `Escenario ${item.seq}`; }
+      function getAnswerKey(index = currentItemNumber()) { return String(index); }
+
+      function collectCurrentAnswer() {
+        const item = currentItem();
+        const key = getAnswerKey();
+        const previous = state.answers[key] || { timeSeconds: 0, kind: item.kind };
+        if (item.kind === 'decision') {
+          const selected = els.options.querySelector('input[name="answerOption"]:checked');
+          state.answers[key] = {
+            kind: item.kind,
+            selectedOption: selected?.value || '',
+            otherText: els.otherText.value.trim(),
+            justification: els.justification.value.trim(),
+            timeSeconds: Number(previous.timeSeconds || 0)
+          };
+        } else {
+          state.answers[key] = {
+            kind: item.kind,
+            interpretation: els.interpretation.value.trim(),
+            didacticAction: els.didacticAction.value.trim(),
+            timeSeconds: Number(previous.timeSeconds || 0)
+          };
+        }
+        persistLocal();
+        return state.answers[key];
+      }
+
+      function updateItemElapsed() {
+        if (!state.itemEnteredAt) return;
+        const key = getAnswerKey();
+        const item = currentItem();
+        const answer = state.answers[key] || (item.kind === 'decision'
+          ? { kind: item.kind, selectedOption: '', otherText: '', justification: '', timeSeconds: 0 }
+          : { kind: item.kind, interpretation: '', didacticAction: '', timeSeconds: 0 });
+        answer.timeSeconds = Number(answer.timeSeconds || 0) + Math.max(0, Math.round((Date.now() - state.itemEnteredAt) / 1000));
+        state.answers[key] = answer;
+        state.itemEnteredAt = Date.now();
+      }
+
+      async function postToSheet(payload) {
+        if (!REMOTE_ENABLED) return;
+        const params = new URLSearchParams();
+        Object.entries(payload).forEach(([key, value]) => params.set(key, value == null ? '' : String(value)));
+        await fetch(ENDPOINT, { method: 'POST', mode: 'no-cors', body: params, keepalive: true, cache: 'no-store' });
+      }
+
+      function jsonp(params, timeoutMs = 12000) {
+        if (!REMOTE_ENABLED) return Promise.resolve({ ok: false, local: true });
+        return new Promise((resolve, reject) => {
+          const callback = `__gs_cb_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+          const script = document.createElement('script');
+          const timer = setTimeout(() => { cleanup(); reject(new Error('La verificación con Google Sheets excedió el tiempo de espera.')); }, timeoutMs);
+          function cleanup() { clearTimeout(timer); script.remove(); try { delete window[callback]; } catch { window[callback] = undefined; } }
+          window[callback] = data => { cleanup(); resolve(data); };
+          const url = new URL(ENDPOINT);
+          Object.entries({ ...params, callback }).forEach(([key, value]) => url.searchParams.set(key, String(value)));
+          script.onerror = () => { cleanup(); reject(new Error('No se pudo verificar la conexión con Google Sheets.')); };
+          script.src = url.toString();
+          document.head.appendChild(script);
+        });
+      }
+
+      async function verifyStatus(expectedStatus = null, attempts = 5, expectedItem = null) {
+        let last = null;
+        for (let i = 0; i < attempts; i++) {
+          last = await jsonp({ action: 'status', session_token: state.sessionToken });
+          const itemSaved = expectedItem == null || (Array.isArray(last?.saved_item_numbers) && last.saved_item_numbers.includes(expectedItem));
+          if (last?.ok && last.exists && itemSaved && (!expectedStatus || last.status === expectedStatus)) return last;
+          await new Promise(resolve => setTimeout(resolve, 500 + i * 250));
+        }
+        throw new Error(expectedStatus === 'completed' ? 'No fue posible confirmar el envío final en Google Sheets.' : 'No fue posible confirmar el guardado en Google Sheets.');
+      }
+
+      function queueRemoteSave(itemNumber, answer) {
+        if (!REMOTE_ENABLED) return Promise.resolve();
+        const item = items[itemNumber - 1];
+        if (item.kind === 'decision' && !answer.selectedOption) return Promise.resolve();
+        if (item.kind === 'didactic' && !answer.interpretation && !answer.didacticAction) return Promise.resolve();
+        const task = async () => {
+          await ensureRemoteSession();
+          setSaveStatus('saving', 'Guardando en Google Sheets…');
+          const payload = { action: 'save', session_token: state.sessionToken, item_number: itemNumber, item_kind: item.kind, time_seconds: answer.timeSeconds || 0 };
+          if (item.kind === 'decision') {
+            payload.selected_option = answer.selectedOption || '';
+            payload.other_text = answer.otherText || '';
+            payload.justification = answer.justification || '';
+          } else {
+            payload.interpretation = answer.interpretation || '';
+            payload.didactic_action = answer.didacticAction || '';
+          }
+          await postToSheet(payload);
+          setSaveStatus('saved', 'Guardado en Google Sheets');
+        };
+        saveSequence = saveSequence.then(task).catch(error => {
+          console.error(error);
+          setSaveStatus('error', 'Pendiente de sincronizar');
+          showBanner('error', 'El avance está guardado en este dispositivo, pero no se pudo confirmar la sincronización con Google Sheets. Revise su conexión antes del envío final.');
+        });
+        return saveSequence;
+      }
+
+      function scheduleSave() {
+        collectCurrentAnswer();
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(() => {
+          setSaveStatus('saved', REMOTE_ENABLED ? 'Guardado en este dispositivo' : 'Progreso local guardado');
+        }, 250);
+      }
+
+      async function startRemoteSession() {
+        if (!REMOTE_ENABLED) return;
+        await postToSheet({
+          action: 'start', session_token: state.sessionToken, full_name: state.fullName,
+          university: state.university, entry_year: state.entryYear, informed_consent: 'true',
+          instrument_version: CONFIG.INSTRUMENT_VERSION || '3.0', started_at: state.startedAt
+        });
+        await verifyStatus('in_progress', 6);
+        state.remoteStarted = true;
+        persistLocal();
+      }
+
+      function ensureRemoteSession() {
+        if (!REMOTE_ENABLED || state.remoteStarted) return Promise.resolve();
+        if (remoteStartPromise) return remoteStartPromise;
+        remoteStartPromise = startRemoteSession().finally(() => { remoteStartPromise = null; });
+        return remoteStartPromise;
+      }
+
+      function renderDidacticScenario(item) {
+        return `
+          <div class="scenario-box context">
+            <div class="scenario-box-header">${escapeHtml(item.classIntro)}</div>
+            <div class="callout-content">${item.scenarioBody}</div>
+          </div>
+          <div class="scenario-box student">
+            <div class="scenario-box-header">${escapeHtml(item.studentIntro)}</div>
+            <p class="student-quote">${escapeHtml(item.studentResponse)}</p>
+          </div>`;
+      }
+
+      function renderQuestion(scrollBehavior = 'smooth') {
+        const item = currentItem();
+        const n = currentItemNumber();
+        const answer = state.answers[getAnswerKey()] || {};
+        const percent = Math.round((n / items.length) * 100);
+        els.progressLabel.textContent = `${BLOCKS[item.block].label} · ${getItemLabel(item)} de ${BLOCKS[item.block].count}`;
+        els.progressPercent.textContent = `${percent} % del recorrido`;
+        els.progressFill.style.width = `${percent}%`;
+        els.itemKicker.textContent = `${BLOCKS[item.block].label} · ${getItemLabel(item)}`;
+        els.itemTitle.textContent = item.title;
+        els.itemValidation.textContent = '';
+        els.prevBtn.disabled = state.currentIndex === 0;
+        els.nextBtn.textContent = state.currentIndex === items.length - 1 ? 'Revisar respuestas' : 'Siguiente';
+
+        const showFigure = Boolean(item.figure);
+        els.scenarioBlock.classList.toggle('with-figure', showFigure);
+        els.originalFigure.classList.toggle('visible', showFigure);
+
+        if (item.kind === 'decision') {
+          els.decisionSection.classList.remove('hidden');
+          els.didacticSection.classList.add('hidden');
+          els.scenarioText.innerHTML = item.body;
+          els.itemPrompt.textContent = item.prompt;
+          els.options.innerHTML = '';
+
+          item.options.forEach(optionText => {
+            const wrapper = document.createElement('label');
+            wrapper.className = `option${answer.selectedOption === optionText ? ' selected' : ''}`;
+            wrapper.innerHTML = `<input type="radio" name="answerOption" value="${escapeHtml(optionText)}" ${answer.selectedOption === optionText ? 'checked' : ''}><span>${escapeHtml(optionText)}</span>`;
+            wrapper.querySelector('input').addEventListener('change', () => {
+              [...els.options.querySelectorAll('.option')].forEach(el => el.classList.remove('selected'));
+              wrapper.classList.add('selected');
+              els.otherField.classList.toggle('visible', optionText === 'Otra respuesta.');
+              scheduleSave();
+            });
+            els.options.appendChild(wrapper);
+          });
+
+          els.otherText.value = answer.otherText || '';
+          els.justification.value = answer.justification || '';
+          els.charCount.textContent = String(els.justification.value.length);
+          els.otherField.classList.toggle('visible', isOtherSelected(answer));
+        } else {
+          els.decisionSection.classList.add('hidden');
+          els.didacticSection.classList.remove('hidden');
+          els.otherField.classList.remove('visible');
+          els.scenarioText.innerHTML = renderDidacticScenario(item);
+          els.interpretation.value = answer.interpretation || '';
+          els.didacticAction.value = answer.didacticAction || '';
+          els.interpretationCount.textContent = String(els.interpretation.value.length);
+          els.didacticActionCount.textContent = String(els.didacticAction.value.length);
+        }
+
+        state.itemEnteredAt = Date.now();
+        state.view = 'question';
+        persistLocal();
+        window.scrollTo({ top: 0, behavior: scrollBehavior });
+      }
+
+      function showOnly(section) {
+        els.landing.style.display = 'none';
+        els.blockIntro.classList.remove('active');
+        els.questionWrap.classList.remove('active');
+        els.review.classList.remove('active');
+        els.finish.classList.remove('active');
+        if (section === 'landing') {
+          els.landing.style.display = '';
+        } else {
+          els[section].classList.add('active');
+        }
+      }
+
+      function showLanding() {
+        showOnly('landing');
+        state.view = 'landing';
+        persistLocal();
+        window.scrollTo({ top: 0, behavior: 'auto' });
+      }
+
+      function showBlockIntro(blockId, instant = false) {
+        const block = BLOCKS[blockId];
+        if (!block) return;
+        els.blockChip.textContent = block.label;
+        els.blockTitle.textContent = block.title;
+        els.blockDescription.textContent = block.description || '';
+        els.blockDescription.classList.toggle('hidden', !block.description);
+        els.blockPoints.innerHTML = block.points.map(point => `<div class="block-point"><strong>${escapeHtml(point.title)}</strong><span>${escapeHtml(point.text)}</span></div>`).join('');
+        els.blockChecklist.innerHTML = block.checklist.map(item => `<li>${escapeHtml(item)}</li>`).join('');
+        els.blockStartBtn.textContent = `Comenzar ${block.label}`;
+        state.pendingBlock = blockId;
+        state.view = 'blockIntro';
+        persistLocal();
+        showOnly('blockIntro');
+        window.scrollTo({ top: 0, behavior: instant ? 'auto' : 'smooth' });
+      }
+
+      function showQuestionScreen(instant = false) {
+        state.pendingBlock = null;
+        showOnly('questionWrap');
+        renderQuestion(instant ? 'auto' : 'smooth');
+      }
+
+      function validateCurrent() {
+        const item = currentItem();
+        const answer = collectCurrentAnswer();
+        if (item.kind === 'decision') {
+          if (!answer.selectedOption) return 'Seleccione una alternativa.';
+          if (isOtherSelected(answer) && !answer.otherText) return 'Especifique su otra respuesta.';
+          if (!answer.justification) return 'Escriba una justificación antes de continuar.';
+        } else {
+          if (!answer.interpretation) return 'Escriba su interpretación de la respuesta del/de la estudiante.';
+          if (!answer.didacticAction) return 'Describa al menos una acción didáctica concreta.';
+        }
+        return '';
+      }
+
+      function buildReview() {
+        els.reviewList.innerHTML = '';
+        items.forEach((item, index) => {
+          const n = index + 1;
+          const answer = state.answers[String(n)] || {};
+          let summary = '';
+          if (item.kind === 'decision') {
+            summary = answer.selectedOption ? `${answer.selectedOption}${answer.otherText ? ` · ${answer.otherText}` : ''}` : 'Sin alternativa registrada';
+          } else {
+            summary = answer.interpretation && answer.didacticAction ? 'Interpretación y acción didáctica registradas.' : 'Escenario incompleto';
+          }
+          const row = document.createElement('div');
+          row.className = 'review-item';
+          row.innerHTML = `<div class="review-number">${n}</div><div><div class="review-title">${escapeHtml(`${BLOCKS[item.block].label} · ${getItemLabel(item)} · ${item.title}`)}</div><div class="review-choice">${escapeHtml(summary)}</div></div><button class="edit-btn" type="button">Editar</button>`;
+          row.querySelector('button').addEventListener('click', () => {
+            state.currentIndex = index;
+            showQuestionScreen();
+          });
+          els.reviewList.appendChild(row);
+        });
+      }
+
+      function showReview(scrollBehavior = 'smooth') {
+        updateItemElapsed();
+        collectCurrentAnswer();
+        showOnly('review');
+        state.view = 'review';
+        persistLocal();
+        buildReview();
+        window.scrollTo({ top: 0, behavior: scrollBehavior });
+      }
+
+      function allAnswersComplete() {
+        for (let i = 1; i <= items.length; i++) {
+          const item = items[i - 1];
+          const answer = state.answers[String(i)];
+          if (!answer) return false;
+          if (item.kind === 'decision') {
+            if (!answer.selectedOption || !answer.justification) return false;
+            if (isOtherSelected(answer) && !answer.otherText) return false;
+          } else {
+            if (!answer.interpretation || !answer.didacticAction) return false;
+          }
+        }
+        return true;
+      }
+
+      function showFinishSending() {
+        showOnly('finish');
+        state.view = 'finish';
+        persistLocal();
+        els.finishIcon.textContent = '↻';
+        els.finishIcon.classList.add('sending');
+        els.finishTitle.textContent = 'Respuestas recibidas';
+        els.finishMessage.textContent = 'El formulario se cerró correctamente. Las respuestas se están registrando en Google Sheets.';
+        els.confirmationBox.classList.add('hidden');
+        els.retrySubmitBtn.classList.add('hidden');
+        window.scrollTo({ top: 0, behavior: 'auto' });
+      }
+
+      function showFinishConfirmed() {
+        els.finishIcon.textContent = '✓';
+        els.finishIcon.classList.remove('sending');
+        els.finishTitle.textContent = 'Respuestas enviadas';
+        els.finishMessage.textContent = 'Gracias por completar el cuestionario. La aplicación quedó confirmada en la base de datos.';
+        els.confirmationCode.textContent = state.sessionToken.replaceAll('-', '').slice(0, 10).toUpperCase();
+        els.confirmationBox.classList.remove('hidden');
+        els.retrySubmitBtn.classList.add('hidden');
+      }
+
+      function showFinishError(message) {
+        showOnly('finish');
+        state.view = 'finish';
+        persistLocal();
+        els.finishIcon.textContent = '!';
+        els.finishIcon.classList.remove('sending');
+        els.finishTitle.textContent = 'Envío pendiente de confirmación';
+        els.finishMessage.textContent = message || 'No fue posible confirmar el envío. Sus respuestas siguen guardadas en este dispositivo.';
+        els.confirmationBox.classList.add('hidden');
+        els.retrySubmitBtn.classList.remove('hidden');
+      }
+
+      function finishSubmission() {
+        els.submitValidation.textContent = '';
+        if (!allAnswersComplete()) {
+          els.submitValidation.textContent = 'Hay respuestas incompletas. Revise el cuestionario antes de enviar.';
+          return;
+        }
+        if (!REMOTE_ENABLED) {
+          els.submitValidation.textContent = 'El cuestionario aún no está conectado con Google Sheets. Complete GOOGLE_APPS_SCRIPT_URL en config.js antes de aplicarlo.';
+          return;
+        }
+        clearTimeout(saveTimer);
+        els.submitBtn.disabled = true;
+        state.completionPending = true;
+        persistLocal();
+        setSaveStatus('saving', 'Registrando respuestas…');
+        showFinishSending();
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          window.setTimeout(() => { void completeSubmissionInBackground(); }, 0);
+        }));
+      }
+
+      async function completeSubmissionInBackground() {
+        try {
+          await ensureRemoteSession();
+          await postToSheet({
+            action: 'complete', session_token: state.sessionToken, full_name: state.fullName,
+            university: state.university, entry_year: state.entryYear,
+            instrument_version: CONFIG.INSTRUMENT_VERSION || '3.0', answers_json: JSON.stringify(state.answers)
+          });
+          showFinishConfirmed();
+          setSaveStatus('saved', 'Respuestas enviadas');
+          try {
+            const remoteStatus = await verifyStatus('completed', 2);
+            state.completed = true;
+            state.completionPending = false;
+            persistLocal();
+            clearLocal();
+            hideBanner();
+            if (remoteStatus?.confirmation_code) els.confirmationCode.textContent = remoteStatus.confirmation_code;
+          } catch (verificationError) {
+            console.warn('El envío se realizó, pero la comprobación quedó pendiente.', verificationError);
+            state.completionPending = true;
+            persistLocal();
+            setSaveStatus('saving', 'Enviado; comprobación pendiente');
+          }
+        } catch (error) {
+          console.error(error);
+          state.completionPending = false;
+          persistLocal();
+          const message = error?.message || 'No fue posible confirmar el envío.';
+          showFinishError(message);
+          setSaveStatus('error', 'Envío pendiente');
+          showBanner('error', 'Las respuestas permanecen guardadas en este dispositivo. Presione “Reintentar envío” cuando tenga conexión.');
+        } finally {
+          els.submitBtn.disabled = false;
+          els.submitBtn.textContent = 'Enviar respuestas';
+        }
+      }
+
+      function restoreState(saved) {
+        state = saved;
+        state.itemEnteredAt = Date.now();
+        saveSequence = Promise.resolve();
+        remoteStartPromise = null;
+        if (state.pendingBlock) {
+          showBlockIntro(state.pendingBlock, true);
+        } else if (state.view === 'review') {
+          showReview('auto');
+        } else if (state.view === 'finish') {
+          if (state.completionPending) {
+            showFinishSending();
+          } else {
+            showFinishError('Se recuperó un intento de envío pendiente. Si es necesario, puede reenviarlo desde esta pantalla.');
+          }
+        } else {
+          showQuestionScreen(true);
+        }
+        if (REMOTE_ENABLED) {
+          setSaveStatus('saving', 'Reconectando en segundo plano…');
+          void ensureRemoteSession().then(() => {
+            hideBanner();
+            setSaveStatus('saved', 'Sesión recuperada');
+          }).catch(error => {
+            console.error(error);
+            showBanner('error', 'Se recuperó el progreso local, pero la sincronización con Google Sheets está pendiente. Puede continuar respondiendo.');
+            setSaveStatus('error', 'Sin sincronizar');
+          });
+        } else {
+          setSaveStatus('saved', 'Progreso local recuperado');
+        }
+      }
+
+      els.startForm.addEventListener('submit', event => {
+        event.preventDefault();
+        els.startValidation.textContent = '';
+        hideBanner();
+        const fullName = els.fullName.value.trim();
+        const university = els.university.value.trim();
+        const entryYear = Number(els.entryYear.value);
+        if (!fullName) { els.startValidation.textContent = 'Ingrese el nombre completo.'; return; }
+        if (!university) { els.startValidation.textContent = 'Ingrese la universidad.'; return; }
+        if (!Number.isInteger(entryYear) || entryYear < 1980 || entryYear > CURRENT_YEAR) { els.startValidation.textContent = `Ingrese un año válido entre 1980 y ${CURRENT_YEAR}.`; return; }
+        if (!els.consent.checked) { els.startValidation.textContent = 'Debe aceptar la declaración de participación para continuar.'; return; }
+
+        state = {
+          sessionToken: makeSessionToken(), fullName, university, entryYear,
+          currentIndex: 0, pendingBlock: 'A', view: 'blockIntro', answers: {},
+          startedAt: new Date().toISOString(), itemEnteredAt: 0,
+          completed: false, completionPending: false, remoteStarted: false
+        };
+        saveSequence = Promise.resolve();
+        remoteStartPromise = null;
+        persistLocal();
+        showBlockIntro('A', true);
+
+        if (REMOTE_ENABLED) {
+          setSaveStatus('saving', 'Conectando en segundo plano…');
+          void ensureRemoteSession().then(() => {
+            hideBanner();
+            setSaveStatus('saved', 'Sesión registrada en Google Sheets');
+          }).catch(error => {
+            console.error(error);
+            setSaveStatus('error', 'Pendiente de sincronizar');
+            showBanner('error', 'Puede continuar respondiendo. El progreso está guardado en este dispositivo y el sistema volverá a intentar conectarse con Google Sheets.');
+          });
+        } else {
+          setSaveStatus('saved', 'Modo local de prueba');
+          showBanner('warning', 'Este archivo todavía no está conectado con Google Sheets. Puede probar el cuestionario, pero el envío final permanecerá bloqueado hasta configurar GOOGLE_APPS_SCRIPT_URL en config.js.');
+        }
+      });
+
+      els.blockStartBtn.addEventListener('click', () => {
+        showQuestionScreen();
+      });
+
+      els.nextBtn.addEventListener('click', () => {
+        updateItemElapsed();
+        const error = validateCurrent();
+        if (error) { els.itemValidation.textContent = error; return; }
+        els.itemValidation.textContent = '';
+        const n = currentItemNumber();
+        const answer = collectCurrentAnswer();
+        queueRemoteSave(n, answer);
+        const nextIndex = state.currentIndex + 1;
+        if (nextIndex >= items.length) {
+          showReview();
+          return;
+        }
+        const currentBlock = items[state.currentIndex].block;
+        const nextBlock = items[nextIndex].block;
+        state.currentIndex = nextIndex;
+        if (nextBlock !== currentBlock) {
+          showBlockIntro(nextBlock);
+        } else {
+          showQuestionScreen();
+        }
+      });
+
+      els.prevBtn.addEventListener('click', () => {
+        if (state.currentIndex === 0) return;
+        updateItemElapsed();
+        const answer = collectCurrentAnswer();
+        queueRemoteSave(currentItemNumber(), answer);
+        state.currentIndex -= 1;
+        showQuestionScreen();
+      });
+
+      els.exitBtn.addEventListener('click', () => {
+        updateItemElapsed();
+        const answer = collectCurrentAnswer();
+        queueRemoteSave(currentItemNumber(), answer);
+        persistLocal();
+        showLanding();
+        els.resumeBox.classList.add('visible');
+        setSaveStatus('saved', REMOTE_ENABLED ? 'Progreso guardado localmente; sincronizando…' : 'Progreso local guardado');
+      });
+
+      els.justification.addEventListener('input', () => { els.charCount.textContent = String(els.justification.value.length); scheduleSave(); });
+      els.otherText.addEventListener('input', scheduleSave);
+      els.interpretation.addEventListener('input', () => { els.interpretationCount.textContent = String(els.interpretation.value.length); scheduleSave(); });
+      els.didacticAction.addEventListener('input', () => { els.didacticActionCount.textContent = String(els.didacticAction.value.length); scheduleSave(); });
+      els.backToQuestions.addEventListener('click', () => { state.currentIndex = items.length - 1; showQuestionScreen(); });
+      els.submitBtn.addEventListener('click', finishSubmission);
+      els.retrySubmitBtn.addEventListener('click', finishSubmission);
+
+      els.resumeBtn.addEventListener('click', () => {
+        const saved = readLocalState();
+        if (!saved) { els.resumeBox.classList.remove('visible'); return; }
+        restoreState(saved);
+      });
+
+      els.discardBtn.addEventListener('click', () => {
+        if (!confirm('¿Desea eliminar el progreso guardado en este dispositivo y comenzar de nuevo?')) return;
+        clearLocal();
+        state = emptyState();
+        els.resumeBox.classList.remove('visible');
+        setSaveStatus('', 'Sin iniciar');
+      });
+
+      window.addEventListener('beforeunload', () => {
+        if (!state.completed && state.sessionToken && state.view === 'question') {
+          updateItemElapsed();
+          collectCurrentAnswer();
+          persistLocal();
+        }
+      });
+
+      const existing = readLocalState();
+      if (existing) {
+        els.resumeBox.classList.add('visible');
+        setSaveStatus('saved', 'Progreso disponible');
+      }
+      if (!REMOTE_ENABLED) showBanner('warning', 'Modo de prueba: configure Google Apps Script y pegue la URL /exec en config.js para guardar las respuestas en Google Sheets.');
+    })();
+  </script>
+</body>
+</html>
